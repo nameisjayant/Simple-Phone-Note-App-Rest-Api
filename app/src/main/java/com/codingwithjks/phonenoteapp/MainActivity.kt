@@ -23,11 +23,12 @@ import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity @Inject constructor() : AppCompatActivity() , Listener{
+class MainActivity @Inject constructor() : AppCompatActivity(), Listener {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private val phoneViewModel: PhoneViewModel by viewModels()
+
     @Inject
     lateinit var phoneAdapter: PhoneAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,19 +42,19 @@ class MainActivity @Inject constructor() : AppCompatActivity() , Listener{
     private fun setPhone() {
         binding.apply {
             save.setOnClickListener {
-                if(!TextUtils.isEmpty(name.text.toString()) && !TextUtils.isEmpty(phoneNo.text.toString())){
+                if (!TextUtils.isEmpty(name.text.toString()) && !TextUtils.isEmpty(phoneNo.text.toString())) {
                     lifecycleScope.launchWhenStarted {
                         phoneViewModel.setPhone(
                             name.text.toString(),
                             phoneNo.text.toString().toLong()
-                        ).catch { e->
+                        ).catch { e ->
                             showMsg("${e.message}")
-                        }.collect {data->
+                        }.collect { data ->
                             Log.d("main", "$data")
                             showMsg("data added successfully..")
                         }
                     }
-                }else{
+                } else {
                     showMsg("please fill all the fields..")
                 }
             }
@@ -63,29 +64,29 @@ class MainActivity @Inject constructor() : AppCompatActivity() , Listener{
     private fun getPhone() {
         phoneViewModel.getPhone()
         lifecycleScope.launchWhenStarted {
-           binding.apply {
-               phoneViewModel.phoneApiState.collect {
-                   when(it){
-                       is ApiState.Success->{
-                           recyclerview.isVisible = true
-                           progressBar.isVisible = false
-                           phoneAdapter.submitList(it.data)
-                       }
-                       is ApiState.Failure->{
-                           recyclerview.isVisible = false
-                           progressBar.isVisible = false
-                           Log.d("main", "getPhone: ")
-                       }
-                       is ApiState.Loading->{
-                           recyclerview.isVisible = false
-                           progressBar.isVisible = true
-                       }
-                       is ApiState.Empty->{
+            binding.apply {
+                phoneViewModel.phoneApiState.collect {
+                    when (it) {
+                        is ApiState.Success -> {
+                            recyclerview.isVisible = true
+                            progressBar.isVisible = false
+                            phoneAdapter.submitList(it.data)
+                        }
+                        is ApiState.Failure -> {
+                            recyclerview.isVisible = false
+                            progressBar.isVisible = false
+                            Log.d("main", "getPhone: ")
+                        }
+                        is ApiState.Loading -> {
+                            recyclerview.isVisible = false
+                            progressBar.isVisible = true
+                        }
+                        is ApiState.Empty -> {
 
-                       }
-                   }
-               }
-           }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -100,42 +101,42 @@ class MainActivity @Inject constructor() : AppCompatActivity() , Listener{
     }
 
     override fun deleteOnClick(position: Int, userId: Int) {
-       lifecycleScope.launchWhenStarted {
-           phoneViewModel.deletePhone(userId)
-               .catch { e->
-                   Log.d("main", "${e.message}")
-               }.collect {msg->
-                   showMsg(msg)
-               }
-       }
+        lifecycleScope.launchWhenStarted {
+            phoneViewModel.deletePhone(userId)
+                .catch { e ->
+                    Log.d("main", "${e.message}")
+                }.collect { msg ->
+                    showMsg(msg)
+                }
+        }
     }
 
     override fun updateOnClick(position: Int, userId: Int, name: String, phoneNo: Long) {
-        val alertDialog = AlertDialog.Builder(this)
-        val binding = OpenDialogBinding.inflate(LayoutInflater.from(this))
-        val dialog = alertDialog.create()
-        dialog.setView(binding.root)
-        binding.apply {
-            name.setText
-            phoneNo.setText(town)
-            save.setOnClickListener {
-                if (!TextUtils.isEmpty(name.text.toString()) && !TextUtils.isEmpty(phoneNo.text.toString())) {
-                    lifecycleScope.launchWhenStarted {
-                        mainViewModel.update(busId,busNo.text.toString().trim(),towns.text.toString()).catch { e->
-                            showMsg("${e.message}")
-                        }.collect { response->
-                            Log.d("main", "openDialog: $response")
-                            showMsg("updated successfully...")
-                            getBusData()
-                        }
-                    }
-                    dialog.dismiss()
-                } else {
-                    showMsg("please fill all the fields...")
-                }
-            }
-        }
-
-        dialog.show()
+//        val alertDialog = AlertDialog.Builder(this)
+//        val binding = OpenDialogBinding.inflate(LayoutInflater.from(this))
+//        val dialog = alertDialog.create()
+//        dialog.setView(binding.root)
+//        binding.apply {
+//            name.setText
+//            phoneNo.setText(town)
+//            save.setOnClickListener {
+//                if (!TextUtils.isEmpty(name.text.toString()) && !TextUtils.isEmpty(phoneNo.text.toString())) {
+//                    lifecycleScope.launchWhenStarted {
+//                        mainViewModel.update(busId,busNo.text.toString().trim(),towns.text.toString()).catch { e->
+//                            showMsg("${e.message}")
+//                        }.collect { response->
+//                            Log.d("main", "openDialog: $response")
+//                            showMsg("updated successfully...")
+//                            getBusData()
+//                        }
+//                    }
+//                    dialog.dismiss()
+//                } else {
+//                    showMsg("please fill all the fields...")
+//                }
+//            }
+//        }
+//
+//        dialog.show()
     }
 }
