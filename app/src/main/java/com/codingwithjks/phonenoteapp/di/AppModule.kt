@@ -37,13 +37,13 @@ object AppModule {
 
 }
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class AppModuleTwo {
-
-    @Binds
-   abstract fun providesOnClickDelete(
-        mainActivity: MainActivity
-    ):Listener
-
-}
+//@Module
+//@InstallIn(SingletonComponent::class)
+//abstract class AppModuleTwo {
+//
+//    @Binds
+//   abstract fun providesOnClickDelete(
+//        mainActivity: MainActivity
+//    ):Listener
+//
+//}

@@ -1,5 +1,6 @@
 package com.codingwithjks.phonenoteapp.data.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,9 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codingwithjks.phonenoteapp.data.Phone
 import com.codingwithjks.phonenoteapp.data.util.Listener
 import com.codingwithjks.phonenoteapp.databinding.EachRowBinding
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class PhoneAdapter @Inject constructor(private val listener: Listener) : ListAdapter<Phone,PhoneAdapter.PhoneViewHolder>(Diff) {
+class PhoneAdapter
+constructor(private val listener: Listener) : ListAdapter<Phone,PhoneAdapter.PhoneViewHolder>(Diff) {
+
+
 
     inner class PhoneViewHolder(private val binding: EachRowBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(phone: Phone){

@@ -23,14 +23,12 @@ import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity @Inject constructor() : AppCompatActivity(), Listener {
+class MainActivity : AppCompatActivity(), Listener {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private val phoneViewModel: PhoneViewModel by viewModels()
-
-    @Inject
-    lateinit var phoneAdapter: PhoneAdapter
+    private lateinit var phoneAdapter: PhoneAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -52,6 +50,7 @@ class MainActivity @Inject constructor() : AppCompatActivity(), Listener {
                         }.collect { data ->
                             Log.d("main", "$data")
                             showMsg("data added successfully..")
+                            getPhone()
                         }
                     }
                 } else {
@@ -91,6 +90,7 @@ class MainActivity @Inject constructor() : AppCompatActivity(), Listener {
     }
 
     private fun initRecyclerview() {
+        phoneAdapter = PhoneAdapter(this)
         binding.apply {
             recyclerview.apply {
                 setHasFixedSize(true)
@@ -107,36 +107,35 @@ class MainActivity @Inject constructor() : AppCompatActivity(), Listener {
                     Log.d("main", "${e.message}")
                 }.collect { msg ->
                     showMsg(msg)
+                    getPhone()
                 }
         }
     }
 
-    override fun updateOnClick(position: Int, userId: Int, name: String, phoneNo: Long) {
-//        val alertDialog = AlertDialog.Builder(this)
-//        val binding = OpenDialogBinding.inflate(LayoutInflater.from(this))
-//        val dialog = alertDialog.create()
-//        dialog.setView(binding.root)
-//        binding.apply {
-//            name.setText
-//            phoneNo.setText(town)
-//            save.setOnClickListener {
-//                if (!TextUtils.isEmpty(name.text.toString()) && !TextUtils.isEmpty(phoneNo.text.toString())) {
-//                    lifecycleScope.launchWhenStarted {
-//                        mainViewModel.update(busId,busNo.text.toString().trim(),towns.text.toString()).catch { e->
-//                            showMsg("${e.message}")
-//                        }.collect { response->
-//                            Log.d("main", "openDialog: $response")
-//                            showMsg("updated successfully...")
-//                            getBusData()
-//                        }
-//                    }
-//                    dialog.dismiss()
-//                } else {
-//                    showMsg("please fill all the fields...")
-//                }
-//            }
-//        }
-//
-//        dialog.show()
+    override fun updateOnClick(position: Int, userId: Int, name_1: String, phoneNo_1: Long) {
+        val alertDialog = AlertDialog.Builder(this)
+        val binding = OpenDialogBinding.inflate(LayoutInflater.from(this))
+        val dialog = alertDialog.create()
+        dialog.setView(binding.root)
+        binding.apply {
+            name.setText(name_1)
+            phoneNo.setText("$phoneNo_1")
+            save.setOnClickListener {
+                if (!TextUtils.isEmpty(name.text.toString()) && !TextUtils.isEmpty(phoneNo.text.toString())) {
+                    lifecycleScope.launchWhenStarted {
+                        phoneViewModel.deletePhone(userId)
+                            .catch { e ->
+                                Log.d("main", "${e.message}")
+                            }.collect { msg ->
+                                showMsg(msg)
+                                getPhone()
+                            }
+                    }
+                } else {
+                    showMsg("please fill all the field..")
+                }
+            }
+        }
+        dialog.show()
     }
 }
