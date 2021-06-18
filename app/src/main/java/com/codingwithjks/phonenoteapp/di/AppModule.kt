@@ -31,7 +31,7 @@ object AppModule {
         .Builder()
         .run {
             baseUrl(ApiService.BASE_URL)
-            addConverterFactory(MoshiConverterFactory.create(moshi))
+            addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
                 .build()
         }.create(ApiService::class.java)
 

@@ -20,7 +20,6 @@ import com.codingwithjks.phonenoteapp.ui.PhoneViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), Listener {
@@ -105,8 +104,8 @@ class MainActivity : AppCompatActivity(), Listener {
             phoneViewModel.deletePhone(userId)
                 .catch { e ->
                     Log.d("main", "${e.message}")
-                }.collect { msg ->
-                    showMsg(msg)
+                }.collect {
+                    showMsg("deleted successfully...")
                     getPhone()
                 }
         }
@@ -123,13 +122,17 @@ class MainActivity : AppCompatActivity(), Listener {
             save.setOnClickListener {
                 if (!TextUtils.isEmpty(name.text.toString()) && !TextUtils.isEmpty(phoneNo.text.toString())) {
                     lifecycleScope.launchWhenStarted {
-                        phoneViewModel.deletePhone(userId)
+                        phoneViewModel.updatePhone(
+                            userId, name.text.toString(),
+                            phoneNo.text.toString().toLong()
+                        )
                             .catch { e ->
                                 Log.d("main", "${e.message}")
-                            }.collect { msg ->
-                                showMsg(msg)
+                            }.collect {
+                                showMsg("update successfully...")
                                 getPhone()
                             }
+                        dialog.dismiss()
                     }
                 } else {
                     showMsg("please fill all the field..")

@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import retrofit2.Response
 import javax.inject.Inject
 
 class PhoneRepository @Inject constructor(private val apiService: ApiService) {
@@ -18,7 +19,7 @@ class PhoneRepository @Inject constructor(private val apiService: ApiService) {
         emit(apiService.setPhone(name, phoneNo))
     }.flowOn(Dispatchers.IO)
 
-    fun deletePhone(userId:Int):Flow<String> = flow {
+    fun deletePhone(userId:Int): Flow<Response<Unit>> = flow {
         emit(apiService.deletePhone(userId))
     }.flowOn(Dispatchers.IO)
 
@@ -26,7 +27,7 @@ class PhoneRepository @Inject constructor(private val apiService: ApiService) {
         userId: Int,
         name: String,
         phoneNo: Long
-    ):Flow<String> = flow {
+    ): Flow<Response<Unit>> = flow {
         emit(apiService.updatePhone(userId,name,phoneNo))
     }.flowOn(Dispatchers.IO)
 }

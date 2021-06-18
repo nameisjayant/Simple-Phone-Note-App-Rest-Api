@@ -1,6 +1,7 @@
 package com.codingwithjks.phonenoteapp.data.network
 
 import com.codingwithjks.phonenoteapp.data.Phone
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
@@ -22,13 +23,13 @@ interface ApiService {
     @DELETE("/v1/phone/{userId}")
     suspend fun deletePhone(
         @Path("userId") userId:Int
-    ) : String
+    ) : Response<Unit>
 
     @FormUrlEncoded
-    @PUT("/v1/phone/{id}")
+    @PUT("/v1/phone/{userId}")
     suspend fun updatePhone(
         @Path("userId") userId: Int,
         @Field("name") name:String,
         @Field("phoneNo") phoneNo: Long
-    ):String
+    ):Response<Unit>
 }
