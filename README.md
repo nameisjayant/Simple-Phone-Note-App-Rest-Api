@@ -5,6 +5,6 @@ In this project we will learn how to do GET,POST,DELETE,PUT request through retr
 Url =  const val BASE_URL = "https://phone-api-8826.herokuapp.com/v1"
 
 - GET Request == /phone
-- POST Request == /phone == { "name" : "something" , "phoneNo" : "8338738223" }
+- POST Request == /phone == { "name" : "something" , "phoneNo" : "8338738223" }  == Form Data
 - DELETE Request == phone/{userId} 
-- UPDATE Request ==  phone/{userId} == { "name" : "jdjs","phoneNo" : "9843932456"} 
+- UPDATE Request ==  phone/{userId} == { "name" : "jdjs","phoneNo" : "9843932456"} == Form Data
