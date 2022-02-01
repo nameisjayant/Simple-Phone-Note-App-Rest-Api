@@ -8,3 +8,5 @@ Url =  const val BASE_URL = "https://phone-api-8826.herokuapp.com/v1"
 - POST Request == /phone == { "name" : "something" , "phoneNo" : "8338738223" }  == Form Data
 - DELETE Request == phone/{userId} 
 - UPDATE Request ==  phone/{userId} == { "name" : "jdjs","phoneNo" : "9843932456"} == Form Data ..:)
+
+...
